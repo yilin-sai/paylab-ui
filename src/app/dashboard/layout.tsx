@@ -60,8 +60,9 @@ export default function DashboardLayout({
         >
           {/* Repo name badge */}
           <img
-            src="https://img.shields.io/badge/GitHub-yourusername/yourrepo-blue?logo=github"
+            src="https://img.shields.io/badge/GitHub/paylabui-blue?logo=github"
             alt="GitHub Repo"
+            style={{ height: 24 }} // Increase badge height
           />
         </a>
       </Header>
