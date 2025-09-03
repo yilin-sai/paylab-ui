@@ -48,7 +48,7 @@ export default function DashboardLayout({
         PayLab Developer Console
         {/* add github badge */}
         <a
-          href="https://github.com/yourusername/yourrepo"
+          href="https://github.com/yilin-sai/paylab-ui"
           target="_blank"
           rel="noopener noreferrer"
           style={{

@@ -76,7 +76,7 @@ export default function Dashboard() {
         This project is under <strong>active development</strong>. Feedback and
         issues welcome via{" "}
         <a
-          href="https://github.com/yourusername/yourrepo/issues"
+          href="https://github.com/yilin-sai/paylab-ui/issues"
           target="_blank"
           rel="noopener noreferrer"
         >
