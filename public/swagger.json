@@ -8,7 +8,7 @@
       "email": "yilin.sai.sydney@gmail.com"
     }
   },
-  "host": "localhost:4000",
+  "host": "paylab-production.up.railway.app",
   "basePath": "/",
   "tags": [
     {
@@ -20,7 +20,7 @@
       "description": "Payment represents a single payment transaction against a Payment Intent."
     }
   ],
-  "schemes": ["http", "https"],
+  "schemes": ["https"],
   "paths": {
     "/psp/payment-intents/": {
       "post": {
