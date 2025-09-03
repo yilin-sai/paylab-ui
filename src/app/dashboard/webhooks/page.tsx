@@ -49,6 +49,7 @@ export default function WebhooksPage() {
   const [form] = Form.useForm<WebhookFormValues>();
   const router = useRouter();
   const { message } = App.useApp();
+  const [modalLoading, setModalLoading] = useState(false);
 
   const fetchWebhooks = useCallback(async () => {
     setLoading(true);
@@ -64,6 +65,7 @@ export default function WebhooksPage() {
 
   const addWebhook = async (values: WebhookFormValues) => {
     try {
+      setModalLoading(true);
       await createWebhook(values.url, values.events);
       message.success("Webhook created");
       setModalOpen(false);
@@ -71,6 +73,8 @@ export default function WebhooksPage() {
       fetchWebhooks();
     } catch {
       message.error("Failed to create webhook");
+    } finally {
+      setModalLoading(false);
     }
   };
 
@@ -152,6 +156,7 @@ export default function WebhooksPage() {
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
         onOk={() => form.submit()}
+        confirmLoading={modalLoading}
       >
         <Form form={form} layout="vertical" onFinish={addWebhook}>
           <Form.Item

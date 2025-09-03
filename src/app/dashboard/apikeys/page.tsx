@@ -23,6 +23,7 @@ export default function ApiKeysPage() {
   const [newKeyName, setNewKeyName] = useState("");
   const [newKey, setNewKey] = useState("");
   const { message } = App.useApp();
+  const [modalLoading, setModalLoading] = useState(false);
 
   const fetchKeys = useCallback(async () => {
     try {
@@ -45,6 +46,7 @@ export default function ApiKeysPage() {
       return message.warning("Please enter a name for the key");
     }
     try {
+      setModalLoading(true);
       const res = await createApiKey(newKeyName);
       setNewKey(res.apiKey);
       setNewKeyName("");
@@ -59,6 +61,8 @@ export default function ApiKeysPage() {
       } else {
         message.error("Failed to create API key");
       }
+    } finally {
+      setModalLoading(false);
     }
   };
 
@@ -138,6 +142,7 @@ export default function ApiKeysPage() {
         onOk={createKey}
         onCancel={() => setCreating(false)}
         okText="Create"
+        confirmLoading={modalLoading}
       >
         <Input
           placeholder="Key Name (e.g., Staging App)"
