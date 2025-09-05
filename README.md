@@ -10,10 +10,11 @@ Great for **testing**, **learning payment flows**, or **demo projects**.
 
 ## ✨ Features
 
-- **Payment Intents** – create and track lifecycle (requires only an API key).
+- **Payment Intents** – create and track lifecycle.
 - **Payments** – simulate `authorised`, `declined`, `captured`, and more.
 - **Webhooks** – register endpoints to receive transaction events in real time.
 - **API Keys** – free tier, no signup required.
+- **Idempotency Key Support** – prevents duplicate PaymentIntents or Payments on retries (just like real PSPs).
 
 ## 🚀 Quick Start
 

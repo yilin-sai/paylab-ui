@@ -32,6 +32,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
+            "in": "header",
+            "name": "x-idempotency-key",
+            "description": "A unique key to identify the request and ensure idempotency",
+            "required": false,
+            "type": "string"
+          },
+          {
             "in": "body",
             "name": "body",
             "description": "Payment Intent object that needs to be created",
@@ -102,6 +109,13 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
+          {
+            "in": "header",
+            "name": "x-idempotency-key",
+            "description": "A unique key to identify the request and ensure idempotency",
+            "required": false,
+            "type": "string"
+          },
           {
             "name": "paymentIntentId",
             "in": "path",
