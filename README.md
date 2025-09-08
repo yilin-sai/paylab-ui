@@ -15,6 +15,7 @@ Great for **testing**, **learning payment flows**, or **demo projects**.
 - **Webhooks** – register endpoints to receive transaction events in real time.
 - **API Keys** – free tier, no signup required.
 - **Idempotency Key Support** – prevents duplicate PaymentIntents or Payments on retries (just like real PSPs).
+- **Configurable Webhooks** — simulates real PSP quirks with per-event webhook settings (custom delay and repeat delivery for each transaction event type).
 
 ## 🚀 Quick Start
 

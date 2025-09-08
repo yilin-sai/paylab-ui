@@ -1,5 +1,5 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.1.0",
   "info": {
     "description": "An API for a mock Payment Service Provider (PSP) that allows you to create and manage payment intents and payments. Webhooks can be configured to receive real-time updates about payment status changes.",
     "version": "0.1.0",
@@ -8,8 +8,7 @@
       "email": "yilin.sai.sydney@gmail.com"
     }
   },
-  "host": "paylab-production.up.railway.app",
-  "basePath": "/",
+  "servers": [{ "url": "https://paylab-production.up.railway.app/" }],
   "tags": [
     {
       "name": "Payment Intent",
@@ -20,7 +19,6 @@
       "description": "Payment represents a single payment transaction against a Payment Intent."
     }
   ],
-  "schemes": ["https"],
   "paths": {
     "/psp/payment-intents/": {
       "post": {
@@ -28,31 +26,37 @@
         "summary": "Create a Payment Intent",
         "description": "Creates a Payment Intent object.",
         "operationId": "createPaymentIntent",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
         "parameters": [
           {
             "in": "header",
             "name": "x-idempotency-key",
             "description": "A unique key to identify the request and ensure idempotency",
             "required": false,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Payment Intent object that needs to be created",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/CreatePaymentIntentRequest"
+              "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "Payment Intent object that needs to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentIntentRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "Payment Intent created successfully",
-            "schema": {
-              "$ref": "#/definitions/PaymentIntent"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentIntent"
+                }
+              }
             }
           },
           "400": {
@@ -72,21 +76,26 @@
         "summary": "Retrieve a Payment Intent",
         "description": "Retrieves a Payment Intent by its ID.",
         "operationId": "getPaymentIntent",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "paymentIntentId",
             "in": "path",
             "description": "ID of the Payment Intent to retrieve",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "A Payment Intent",
-            "schema": {
-              "$ref": "#/definitions/PaymentIntent"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentIntent"
+                }
+              }
             }
           },
           "404": {
@@ -106,38 +115,46 @@
         "summary": "Create a Payment",
         "description": "Creates a Payment object associated with a Payment Intent.",
         "operationId": "createPayment",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
         "parameters": [
           {
             "in": "header",
             "name": "x-idempotency-key",
             "description": "A unique key to identify the request and ensure idempotency",
             "required": false,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "paymentIntentId",
             "in": "path",
             "description": "ID of the Payment Intent to associate the Payment with",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Payment object that needs to be created",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/CreatePaymentRequest"
+              "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "Payment object that needs to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "Payment created successfully",
-            "schema": {
-              "$ref": "#/definitions/Payment"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                }
+              }
             }
           },
           "400": {
@@ -152,133 +169,185 @@
       }
     }
   },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "x-api-key",
-      "in": "header"
-    }
-  },
-  "definitions": {
-    "CreatePaymentIntentRequest": {
-      "type": "object",
-      "properties": {
-        "amount": {
-          "type": "integer",
-          "description": "Payment amount in cents",
-          "example": 5000
-        },
-        "currency": {
-          "type": "string",
-          "description": "Three-letter ISO currency code",
-          "example": "USD"
-        }
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
       }
     },
-    "PaymentIntent": {
-      "allOf": [
-        { "$ref": "#/definitions/CreatePaymentIntentRequest" },
-        {
-          "type": "object",
-          "properties": {
-            "paymentIntentId": {
-              "type": "string",
-              "description": "ID of the payment intent",
-              "example": "fd26acdc-18aa-4e35-bad4-7eb021cb60c9"
-            },
-            "status": {
-              "type": "string",
-              "description": "Status of the payment intent",
-              "enum": ["requires_payment", "processing", "succeeded", "failed"]
+    "schemas": {
+      "CreatePaymentIntentRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "description": "Payment amount in cents",
+            "example": 5000
+          },
+          "currency": {
+            "type": "string",
+            "description": "Three-letter ISO currency code",
+            "example": "USD"
+          }
+        }
+      },
+      "PaymentIntent": {
+        "allOf": [
+          { "$ref": "#/components/schemas/CreatePaymentIntentRequest" },
+          {
+            "type": "object",
+            "properties": {
+              "paymentIntentId": {
+                "type": "string",
+                "description": "ID of the payment intent",
+                "example": "fd26acdc-18aa-4e35-bad4-7eb021cb60c9"
+              },
+              "status": {
+                "type": "string",
+                "description": "Status of the payment intent",
+                "enum": [
+                  "requires_payment",
+                  "processing",
+                  "succeeded",
+                  "failed"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "CreatePaymentRequest": {
+        "type": "object",
+        "required": ["amount", "currency", "method"],
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "description": "Payment amount in cents",
+            "example": 5000
+          },
+          "currency": {
+            "type": "string",
+            "description": "Three-letter ISO currency code",
+            "example": "USD"
+          },
+          "method": {
+            "type": "string",
+            "description": "Payment method to be used",
+            "example": "card",
+            "enum": ["card"]
+          },
+          "simulate": {
+            "type": "object",
+            "required": ["result"],
+            "properties": {
+              "result": {
+                "type": "string",
+                "description": "payment result to be simulated",
+                "example": "captured",
+                "enum": [
+                  "initiated",
+                  "authorising",
+                  "authorised",
+                  "declined",
+                  "capturing",
+                  "expired",
+                  "captured",
+                  "capture_failed"
+                ]
+              },
+              "config": {
+                "type": "object",
+                "description": "configuration for the simulation",
+                "properties": {
+                  "webhook": {
+                    "type": "object",
+                    "description": "configuration for webhook simulation",
+                    "propertyNames": {
+                      "enum": [
+                        "payment_initiated",
+                        "payment_authorising",
+                        "payment_authorised",
+                        "payment_declined",
+                        "payment_capturing",
+                        "payment_expired",
+                        "payment_captured",
+                        "payment_capture_failed"
+                      ]
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "description": "webhook config for each event type",
+                      "properties": {
+                        "delayMs": {
+                          "type": "integer",
+                          "description": "delay in milliseconds before the webhook is sent",
+                          "example": 2000,
+                          "minimum": 0
+                        },
+                        "repeat": {
+                          "type": "integer",
+                          "description": "number of times to repeat the webhook delivery",
+                          "example": 1,
+                          "minimum": 0
+                        }
+                      }
+                    },
+                    "example": {
+                      "payment_initiated": { "delayMs": 2000, "repeat": 1 }
+                    }
+                  }
+                }
+              }
             }
           }
         }
-      ]
-    },
-    "CreatePaymentRequest": {
-      "type": "object",
-      "properties": {
-        "amount": {
-          "type": "integer",
-          "description": "Payment amount in cents",
-          "example": 5000
-        },
-        "currency": {
-          "type": "string",
-          "description": "Three-letter ISO currency code",
-          "example": "USD"
-        },
-        "method": {
-          "type": "string",
-          "description": "Payment method to be used",
-          "example": "card",
-          "enum": ["card"]
-        },
-        "simulate": {
-          "type": "object",
-          "properties": {
-            "result": {
-              "type": "string",
-              "description": "payment result to be simulated",
-              "example": "captured",
-              "enum": [
-                "initiated",
-                "authorising",
-                "authorised",
-                "declined",
-                "capturing",
-                "expired",
-                "captured",
-                "capture_failed"
-              ]
-            }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "Unique identifier for the transaction",
+            "example": "b955b199-7905-4196-a889-2537b74ce2bb"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the transaction",
+            "example": "payment",
+            "enum": ["payment"]
+          },
+          "method": {
+            "type": "string",
+            "description": "Payment method used",
+            "example": "card",
+            "enum": ["card"]
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Payment amount in cents",
+            "example": 5000
+          },
+          "currency": {
+            "type": "string",
+            "description": "Three-letter ISO currency code",
+            "example": "USD"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the payment",
+            "enum": [
+              "initiated",
+              "authorising",
+              "authorised",
+              "declined",
+              "capturing",
+              "expired",
+              "captured",
+              "capture_failed"
+            ]
           }
-        }
-      }
-    },
-    "Payment": {
-      "type": "object",
-      "properties": {
-        "transactionId": {
-          "type": "string",
-          "description": "Unique identifier for the transaction",
-          "example": "b955b199-7905-4196-a889-2537b74ce2bb"
-        },
-        "type": {
-          "type": "string",
-          "description": "Type of the transaction",
-          "example": "payment",
-          "enum": ["payment"]
-        },
-        "method": {
-          "type": "string",
-          "description": "Payment method used",
-          "example": "card",
-          "enum": ["card"]
-        },
-        "amount": {
-          "type": "integer",
-          "description": "Payment amount in cents",
-          "example": 5000
-        },
-        "currency": {
-          "type": "string",
-          "description": "Three-letter ISO currency code",
-          "example": "USD"
-        },
-        "status": {
-          "type": "string",
-          "description": "Current status of the payment",
-          "enum": [
-            "initiated",
-            "authorising",
-            "authorised",
-            "declined",
-            "capturing",
-            "expired",
-            "captured",
-            "capture_failed"
-          ]
         }
       }
     }
