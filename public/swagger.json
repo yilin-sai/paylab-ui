@@ -20,7 +20,7 @@
     }
   ],
   "paths": {
-    "/psp/payment-intents/": {
+    "/psp/reference/v1/payment-intents/": {
       "post": {
         "tags": ["Payment Intent"],
         "summary": "Create a Payment Intent",
@@ -49,7 +49,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Payment Intent created successfully",
             "content": {
               "application/json": {
@@ -70,7 +70,7 @@
         ]
       }
     },
-    "/psp/payment-intents/{paymentIntentId}": {
+    "/psp/reference/v1/payment-intents/{paymentIntentId}": {
       "get": {
         "tags": ["Payment Intent"],
         "summary": "Retrieve a Payment Intent",
@@ -98,7 +98,7 @@
               }
             }
           },
-          "404": {
+          "400": {
             "description": "Payment Intent not found"
           }
         },
@@ -109,7 +109,7 @@
         ]
       }
     },
-    "/psp/payment-intents/{paymentIntentId}/payments": {
+    "/psp/reference/v1/payment-intents/{paymentIntentId}/payments": {
       "post": {
         "tags": ["Payment"],
         "summary": "Create a Payment",
@@ -147,7 +147,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Payment created successfully",
             "content": {
               "application/json": {
@@ -240,9 +240,9 @@
           },
           "simulate": {
             "type": "object",
-            "required": ["result"],
+            "required": ["transactionResult"],
             "properties": {
-              "result": {
+              "transactionResult": {
                 "type": "string",
                 "description": "payment result to be simulated",
                 "example": "captured",
@@ -257,47 +257,41 @@
                   "capture_failed"
                 ]
               },
-              "config": {
+              "webhook": {
                 "type": "object",
-                "description": "configuration for the simulation",
-                "properties": {
-                  "webhook": {
-                    "type": "object",
-                    "description": "configuration for webhook simulation",
-                    "propertyNames": {
-                      "enum": [
-                        "payment_initiated",
-                        "payment_authorising",
-                        "payment_authorised",
-                        "payment_declined",
-                        "payment_capturing",
-                        "payment_expired",
-                        "payment_captured",
-                        "payment_capture_failed"
-                      ]
+                "description": "configuration for webhook simulation",
+                "propertyNames": {
+                  "enum": [
+                    "payment_initiated",
+                    "payment_authorising",
+                    "payment_authorised",
+                    "payment_declined",
+                    "payment_capturing",
+                    "payment_expired",
+                    "payment_captured",
+                    "payment_capture_failed"
+                  ]
+                },
+                "additionalProperties": {
+                  "type": "object",
+                  "description": "webhook config for each event type",
+                  "properties": {
+                    "delayMs": {
+                      "type": "integer",
+                      "description": "delay in milliseconds before the webhook is sent",
+                      "example": 2000,
+                      "minimum": 0
                     },
-                    "additionalProperties": {
-                      "type": "object",
-                      "description": "webhook config for each event type",
-                      "properties": {
-                        "delayMs": {
-                          "type": "integer",
-                          "description": "delay in milliseconds before the webhook is sent",
-                          "example": 2000,
-                          "minimum": 0
-                        },
-                        "repeat": {
-                          "type": "integer",
-                          "description": "number of times to repeat the webhook delivery",
-                          "example": 1,
-                          "minimum": 0
-                        }
-                      }
-                    },
-                    "example": {
-                      "payment_initiated": { "delayMs": 2000, "repeat": 1 }
+                    "repeat": {
+                      "type": "integer",
+                      "description": "number of times to repeat the webhook delivery",
+                      "example": 1,
+                      "minimum": 0
                     }
                   }
+                },
+                "example": {
+                  "payment_initiated": { "delayMs": 2000, "repeat": 1 }
                 }
               }
             }
