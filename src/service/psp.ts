@@ -5,13 +5,31 @@ export const pspApi = axios.create({
   baseURL: `${base}/psp`,
 });
 
-export const createWebhook = async (url: string, events: string[]) => {
+export const getPsps = async () => {
+  try {
+    const response = await pspApi.get("/webhooks/psps");
+    return response.data;
+  } catch {
+    throw new Error("Failed to fetch PSPs");
+  }
+};
+
+export const createWebhook = async (
+  url: string,
+  events: string[],
+  psp: string,
+  pspSpecificConfigs?: object
+) => {
+  const [pspName, pspVersion] = psp.split("@");
   try {
     const response = await pspApi.post("/webhooks/", [
       {
+        psp: pspName,
+        pspVersion,
         url,
-        transactionEventTypes: events.map((event) => event.replace(".", "_")),
+        transactionEventTypes: events,
         enabled: true,
+        pspSpecificConfigs,
       },
     ]);
     return response.data;

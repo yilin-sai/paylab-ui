@@ -13,7 +13,12 @@ import {
   App,
 } from "antd";
 import { CONTENT_MARGIN, SIDER_WIDTH } from "../layout";
-import { createWebhook, getWebhooks, removeWebhook } from "@/service/psp";
+import {
+  createWebhook,
+  getPsps,
+  getWebhooks,
+  removeWebhook,
+} from "@/service/psp";
 import { useRouter } from "next/navigation";
 
 const { Title } = Typography;
@@ -21,35 +26,54 @@ const { Option } = Select;
 
 type Webhook = {
   webhookSubscriptionId: string;
+  psp: string;
+  pspVersion: string;
   url: string;
   transactionEventTypes: string[];
   enabled: boolean;
 };
 
 const allEventTypes = [
-  "payment.initiated",
-  "payment.authorising",
-  "payment.authorised",
-  "payment.declined",
-  "payment.capturing",
-  "payment.expired",
-  "payment.captured",
-  "payment.capture.failed",
+  "payment_initiated",
+  "payment_authorising",
+  "payment_authorised",
+  "payment_declined",
+  "payment_capturing",
+  "payment_expired",
+  "payment_captured",
+  "payment_capture_failed",
 ];
 
 type WebhookFormValues = {
+  psp: string;
   url: string;
   events: string[];
 };
+
+interface ConfigField {
+  name: string;
+  label: string;
+  type: "text" | "number" | "checkbox" | "select";
+  required: boolean;
+}
 
 export default function WebhooksPage() {
   const [webhooks, setWebhooks] = useState<Webhook[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [form] = Form.useForm<WebhookFormValues>();
+  const selectedPsp = Form.useWatch("psp", form);
   const router = useRouter();
   const { message } = App.useApp();
   const [modalLoading, setModalLoading] = useState(false);
+  const [psps, setPsps] = useState<{
+    [psp: string]: {
+      [version: string]: {
+        eventMap: { [coreEvent: string]: string };
+        configSchema: ConfigField[];
+      };
+    };
+  }>({});
 
   const fetchWebhooks = useCallback(async () => {
     setLoading(true);
@@ -66,7 +90,8 @@ export default function WebhooksPage() {
   const addWebhook = async (values: WebhookFormValues) => {
     try {
       setModalLoading(true);
-      await createWebhook(values.url, values.events);
+      const { url, events, psp, ...pspSpecificConfigs } = values;
+      await createWebhook(url, events, psp, pspSpecificConfigs);
       message.success("Webhook created");
       setModalOpen(false);
       form.resetFields();
@@ -85,6 +110,15 @@ export default function WebhooksPage() {
       fetchWebhooks();
     } catch {
       message.error("Failed to delete webhook");
+    }
+  };
+
+  const fetchPsps = async () => {
+    try {
+      const res = await getPsps();
+      setPsps(res);
+    } catch {
+      message.error("Failed to load PSPs");
     }
   };
 
@@ -109,7 +143,13 @@ export default function WebhooksPage() {
         <Title level={4} style={{ margin: 0 }}>
           Webhooks
         </Title>
-        <Button type="primary" onClick={() => setModalOpen(true)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            setModalOpen(true);
+            fetchPsps();
+          }}
+        >
           Add Webhook
         </Button>
       </div>
@@ -120,6 +160,10 @@ export default function WebhooksPage() {
         loading={loading}
         columns={[
           { title: "ID", dataIndex: "webhookSubscriptionId" },
+          {
+            title: "PSP",
+            render: (_, record) => `${record.psp} @ ${record.pspVersion}`,
+          },
           { title: "URL", dataIndex: "url" },
           {
             title: "Events",
@@ -159,6 +203,16 @@ export default function WebhooksPage() {
         confirmLoading={modalLoading}
       >
         <Form form={form} layout="vertical" onFinish={addWebhook}>
+          <Form.Item name="psp" label="PSP" rules={[{ required: true }]}>
+            <Select placeholder="Select a PSP">
+              {psps &&
+                toPspLabels(psps).map(({ label, value }) => (
+                  <Option key={value} value={value}>
+                    {label}
+                  </Option>
+                ))}
+            </Select>
+          </Form.Item>
           <Form.Item
             name="url"
             label="Webhook URL"
@@ -174,15 +228,75 @@ export default function WebhooksPage() {
             ]}
           >
             <Select mode="multiple" placeholder="Select event types">
-              {allEventTypes.map((evt) => (
-                <Option key={evt} value={evt}>
-                  {evt}
-                </Option>
-              ))}
+              {/* TODO: load event types from webhook profile for this psp */}
+              {selectedPsp &&
+                psps &&
+                toPspEventTypes(selectedPsp, psps).map(({ label, value }) => (
+                  <Option key={value} value={value}>
+                    {label}
+                  </Option>
+                ))}
             </Select>
           </Form.Item>
+          {selectedPsp && psps && toPspConfigs(selectedPsp, psps)}
         </Form>
       </Modal>
     </div>
   );
+}
+
+function toPspLabels(psps: { [psp: string]: { [version: string]: object } }) {
+  return Object.entries(psps).flatMap(([psp, versions]) =>
+    Object.keys(versions).map((version) => ({
+      label: `${psp} @ ${version}`,
+      value: `${psp}@${version}`,
+    }))
+  );
+}
+
+function toPspEventTypes(
+  selectedPsp: string,
+  psps: {
+    [psp: string]: {
+      [version: string]: { eventMap: { [coreEvent: string]: string } };
+    };
+  }
+) {
+  const [psp, version] = selectedPsp.split("@");
+  const filteredCoreEvents = allEventTypes.filter((evt) => {
+    return (
+      psps[psp] &&
+      psps[psp][version] &&
+      psps[psp][version].eventMap &&
+      psps[psp][version].eventMap[evt]
+    );
+  });
+  return filteredCoreEvents.map((evt) => ({
+    label: psps[psp][version].eventMap[evt],
+    value: evt,
+  }));
+}
+
+function toPspConfigs(
+  selectedPsp: string,
+  psps: {
+    [psp: string]: {
+      [version: string]: {
+        eventMap: { [coreEvent: string]: string };
+        configSchema: ConfigField[];
+      };
+    };
+  }
+) {
+  const [psp, version] = selectedPsp.split("@");
+  return psps[psp][version].configSchema.map((field) => (
+    <Form.Item
+      key={field.name}
+      name={field.name}
+      label={field.label}
+      rules={[{ required: field.required }]}
+    >
+      {field.type === "text" && <Input autoComplete="off" />}
+    </Form.Item>
+  ));
 }
