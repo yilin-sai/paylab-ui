@@ -42,6 +42,11 @@ const allEventTypes = [
   "payment_expired",
   "payment_captured",
   "payment_capture_failed",
+
+  "payment_intent_requires_payment",
+  "payment_intent_processing",
+  "payment_intent_succeeded",
+  "payment_intent_failed",
 ];
 
 type WebhookFormValues = {
@@ -167,7 +172,7 @@ export default function WebhooksPage() {
           { title: "URL", dataIndex: "url" },
           {
             title: "Events",
-            dataIndex: "transactionEventTypes",
+            dataIndex: "eventTypes",
             render: (events: string[]) => events.join(", "),
           },
           {

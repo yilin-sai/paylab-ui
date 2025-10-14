@@ -269,7 +269,11 @@
                     "payment_capturing",
                     "payment_expired",
                     "payment_captured",
-                    "payment_capture_failed"
+                    "payment_capture_failed",
+                    "payment_intent_requires_payment",
+                    "payment_intent_processing",
+                    "payment_intent_succeeded",
+                    "payment_intent_failed"
                   ]
                 },
                 "additionalProperties": {

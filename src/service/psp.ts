@@ -27,7 +27,7 @@ export const createWebhook = async (
         psp: pspName,
         pspVersion,
         url,
-        transactionEventTypes: events,
+        eventTypes: events,
         enabled: true,
         pspSpecificConfigs,
       },
