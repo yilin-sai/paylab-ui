@@ -18,6 +18,7 @@ import {
   getPsps,
   getWebhooks,
   removeWebhook,
+  usePspApiClient,
 } from "@/service/psp";
 import { useRouter } from "next/navigation";
 
@@ -79,24 +80,26 @@ export default function WebhooksPage() {
       };
     };
   }>({});
+  const apiClient = usePspApiClient();
 
   const fetchWebhooks = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getWebhooks();
+      const res = await getWebhooks(apiClient);
       setWebhooks(res);
     } catch {
       message.error("Failed to load webhooks");
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message]);
 
   const addWebhook = async (values: WebhookFormValues) => {
     try {
       setModalLoading(true);
       const { url, events, psp, ...pspSpecificConfigs } = values;
-      await createWebhook(url, events, psp, pspSpecificConfigs);
+      await createWebhook(url, events, psp, apiClient, pspSpecificConfigs);
       message.success("Webhook created");
       setModalOpen(false);
       form.resetFields();
@@ -110,7 +113,7 @@ export default function WebhooksPage() {
 
   const deleteWebhook = async (id: string) => {
     try {
-      await removeWebhook(id);
+      await removeWebhook(id, apiClient);
       message.success("Webhook deleted");
       fetchWebhooks();
     } catch {
@@ -120,7 +123,7 @@ export default function WebhooksPage() {
 
   const fetchPsps = async () => {
     try {
-      const res = await getPsps();
+      const res = await getPsps(apiClient);
       setPsps(res);
     } catch {
       message.error("Failed to load PSPs");

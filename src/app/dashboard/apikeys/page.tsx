@@ -4,7 +4,12 @@ import { useEffect, useState, useCallback } from "react";
 import { Table, Button, Space, Modal, Input, App } from "antd";
 import Title from "antd/es/typography/Title";
 import { CONTENT_MARGIN, SIDER_WIDTH } from "../layout";
-import { createApiKey, getApiKeys, revokeApiKey } from "@/service/api";
+import {
+  createApiKey,
+  getApiKeys,
+  revokeApiKey,
+  useApiClient,
+} from "@/service/api";
 import ApiKeyModal from "./newKeyModal";
 import { AxiosError } from "axios";
 
@@ -24,17 +29,19 @@ export default function ApiKeysPage() {
   const [newKey, setNewKey] = useState("");
   const { message } = App.useApp();
   const [modalLoading, setModalLoading] = useState(false);
+  const apiClient = useApiClient();
 
   const fetchKeys = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await getApiKeys();
+      const res = await getApiKeys(apiClient);
       setKeys(res);
     } catch {
       message.error("Failed to fetch API keys");
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message]);
 
   useEffect(() => {
@@ -47,7 +54,7 @@ export default function ApiKeysPage() {
     }
     try {
       setModalLoading(true);
-      const res = await createApiKey(newKeyName);
+      const res = await createApiKey(newKeyName, apiClient);
       setNewKey(res.apiKey);
       setNewKeyName("");
       setCreating(false);
@@ -68,7 +75,7 @@ export default function ApiKeysPage() {
 
   const revokeKey = async (id: string) => {
     try {
-      await revokeApiKey(id);
+      await revokeApiKey(id, apiClient);
       message.success("API Key revoked");
       fetchKeys();
     } catch {

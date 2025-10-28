@@ -1,13 +1,26 @@
-import axios from "axios";
+import { useAuth } from "@clerk/nextjs";
+import axios, { AxiosInstance } from "axios";
 
-const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
-export const pspApi = axios.create({
-  baseURL: `${base}/psp`,
-});
+export function usePspApiClient() {
+  const { getToken } = useAuth();
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
-export const getPsps = async () => {
+  const client = axios.create({
+    baseURL: `${base}/psp`,
+  });
+
+  client.interceptors.request.use(async (config) => {
+    const token = await getToken();
+    config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  });
+
+  return client;
+}
+
+export const getPsps = async (apiClient: AxiosInstance) => {
   try {
-    const response = await pspApi.get("/webhooks/psps");
+    const response = await apiClient.get("/webhooks/psps");
     return response.data;
   } catch {
     throw new Error("Failed to fetch PSPs");
@@ -18,11 +31,12 @@ export const createWebhook = async (
   url: string,
   events: string[],
   psp: string,
+  apiClient: AxiosInstance,
   pspSpecificConfigs?: object
 ) => {
   const [pspName, pspVersion] = psp.split("@");
   try {
-    const response = await pspApi.post("/webhooks/", [
+    const response = await apiClient.post("/webhooks/", [
       {
         psp: pspName,
         pspVersion,
@@ -38,26 +52,29 @@ export const createWebhook = async (
   }
 };
 
-export const getWebhooks = async () => {
+export const getWebhooks = async (apiClient: AxiosInstance) => {
   try {
-    const response = await pspApi.get("/webhooks/");
+    const response = await apiClient.get("/webhooks/");
     return response.data;
   } catch {
     throw new Error("Failed to fetch webhooks");
   }
 };
 
-export const removeWebhook = async (id: string) => {
+export const removeWebhook = async (id: string, apiClient: AxiosInstance) => {
   try {
-    await pspApi.delete(`/webhooks/${id}`);
+    await apiClient.delete(`/webhooks/${id}`);
   } catch {
     throw new Error("Failed to delete webhook");
   }
 };
 
-export const getWebhookHistory = async (id: string) => {
+export const getWebhookHistory = async (
+  id: string,
+  apiClient: AxiosInstance
+) => {
   try {
-    const response = await pspApi.get(`/webhooks/${id}/deliveries`);
+    const response = await apiClient.get(`/webhooks/${id}/deliveries`);
     return response.data;
   } catch {
     throw new Error("Failed to fetch webhook history");

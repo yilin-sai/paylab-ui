@@ -1,6 +1,6 @@
 "use client";
 
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import {
   ApiOutlined,
   DashboardOutlined,
@@ -9,6 +9,13 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  UserButton,
+} from "@clerk/nextjs";
 
 const { Header, Sider, Content } = Layout;
 
@@ -52,7 +59,8 @@ export default function DashboardLayout({
           target="_blank"
           rel="noopener noreferrer"
           style={{
-            marginLeft: "auto",
+            marginLeft: 8,
+            marginRight: "auto",
             display: "flex",
             alignItems: "center",
             gap: 8,
@@ -65,6 +73,26 @@ export default function DashboardLayout({
             style={{ height: 24 }} // Increase badge height
           />
         </a>
+        <SignedOut>
+          <SignInButton>
+            <button
+              style={{
+                fontSize: "medium",
+                fontWeight: 400,
+                margin: "0px 8px",
+                cursor: "pointer",
+              }}
+            >
+              Login
+            </button>
+          </SignInButton>
+          <SignUpButton>
+            <Button type="primary">Sign up</Button>
+          </SignUpButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </Header>
       <Layout style={{ paddingTop: HEADER_HEIGHT }}>
         <Sider
