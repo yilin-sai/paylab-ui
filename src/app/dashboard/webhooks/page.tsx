@@ -21,6 +21,8 @@ import {
   usePspApiClient,
 } from "@/service/psp";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+import { useUser } from "@clerk/nextjs";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -81,6 +83,7 @@ export default function WebhooksPage() {
     };
   }>({});
   const apiClient = usePspApiClient();
+  const { isSignedIn } = useUser();
 
   const fetchWebhooks = useCallback(async () => {
     setLoading(true);
@@ -104,8 +107,18 @@ export default function WebhooksPage() {
       setModalOpen(false);
       form.resetFields();
       fetchWebhooks();
-    } catch {
-      message.error("Failed to create webhook");
+    } catch (error) {
+      if (((error as Error).cause as AxiosError)?.response?.status === 429) {
+        if (isSignedIn) {
+          message.error("You have reached the maximum number of webhooks.");
+        } else {
+          message.error(
+            "Anonymous user can only have 1 webhook. Sign in to create more."
+          );
+        }
+      } else {
+        message.error("Failed to create webhook");
+      }
     } finally {
       setModalLoading(false);
     }

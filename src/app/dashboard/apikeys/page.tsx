@@ -12,6 +12,7 @@ import {
 } from "@/service/api";
 import ApiKeyModal from "./newKeyModal";
 import { AxiosError } from "axios";
+import { useUser } from "@clerk/nextjs";
 
 export default function ApiKeysPage() {
   const [keys, setKeys] = useState<
@@ -30,6 +31,7 @@ export default function ApiKeysPage() {
   const { message } = App.useApp();
   const [modalLoading, setModalLoading] = useState(false);
   const apiClient = useApiClient();
+  const { isSignedIn } = useUser();
 
   const fetchKeys = useCallback(async () => {
     try {
@@ -62,9 +64,13 @@ export default function ApiKeysPage() {
       fetchKeys();
     } catch (error) {
       if (((error as Error).cause as AxiosError)?.response?.status === 429) {
-        message.error(
-          "Anonymous user can only have 1 API key. Sign in to create more."
-        );
+        if (isSignedIn) {
+          message.error("You have reached the maximum number of API keys.");
+        } else {
+          message.error(
+            "Anonymous user can only have 1 API key. Sign in to create more."
+          );
+        }
       } else {
         message.error("Failed to create API key");
       }

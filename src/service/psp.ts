@@ -1,5 +1,5 @@
 import { useAuth } from "@clerk/nextjs";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 
 export function usePspApiClient() {
   const { getToken } = useAuth();
@@ -47,8 +47,8 @@ export const createWebhook = async (
       },
     ]);
     return response.data;
-  } catch {
-    throw new Error("Failed to create webhook");
+  } catch (error) {
+    throw new Error("Failed to create webhook", { cause: error as AxiosError });
   }
 };
 
