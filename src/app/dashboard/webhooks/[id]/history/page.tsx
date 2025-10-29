@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Table, Tag, Typography, App } from "antd";
 import { useParams } from "next/navigation";
-import { getWebhookHistory } from "@/service/psp";
+import { getWebhookHistory, usePspApiClient } from "@/service/psp";
 
 const { Title } = Typography;
 
@@ -24,17 +24,19 @@ export default function WebhookHistoryPage() {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [loading, setLoading] = useState(false);
   const { message } = App.useApp();
+  const apiClient = usePspApiClient();
 
   const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getWebhookHistory(webhookId);
+      const res = await getWebhookHistory(webhookId, apiClient);
       setDeliveries(res);
     } catch {
       message.error("Failed to load delivery history");
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [webhookId, message]);
 
   useEffect(() => {
