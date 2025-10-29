@@ -4,7 +4,7 @@ A **mock Payment Service Provider (PSP)** for developers.
 Simulate **PaymentIntents**, **Payments**, and **Webhooks** without needing access to a real PSP.  
 Great for **testing**, **learning payment flows**, or **demo projects**.
 
-👉 Live Developer Console, free to use: [https://paylab-ui.vercel.app/](https://paylab-ui.vercel.app/)
+👉 Live Developer Console, free to use: [https://paylabo.dev/](https://paylabo.dev/)
 
 > This project is under active development. Feedback and issues welcome via GitHub Issues.
 
@@ -21,14 +21,14 @@ Great for **testing**, **learning payment flows**, or **demo projects**.
 
 ### 1. Get an API Key
 
-Go to the [Console](https://paylab-ui.vercel.app/dashboard/apikeys), click **Create API Key**.  
+Go to the [Console](https://paylabo.dev/dashboard/apikeys), click **Create API Key**.
 Copy it somewhere safe (you only see it once). You'll need it when making requests to the API.
 
 ### 2. Register Webhook
 
-Go to the [Console](https://paylab-ui.vercel.app/dashboard/webhooks), click **Add Webhook** and specify the url and event types you want to subscribe to.
+Go to the [Console](https://paylabo.dev/dashboard/webhooks), click **Add Webhook** and specify the url and event types you want to subscribe to.
 
-The following steps can also be executed using [PayLab Swagger UI](https://paylab-ui.vercel.app/dashboard/docs).
+The following steps can also be executed using [PayLab Swagger UI](https://paylabo.dev/dashboard/docs).
 
 ### 3. Create a PaymentIntent
 
