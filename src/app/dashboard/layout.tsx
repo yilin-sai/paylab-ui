@@ -6,6 +6,7 @@ import {
   DashboardOutlined,
   CloudOutlined,
   FileTextOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -110,6 +111,7 @@ export default function DashboardLayout({
           <Menu
             mode="inline"
             selectedKeys={[pathname]}
+            defaultOpenKeys={["products", "mock-psp", "bin-lookup"]}
             style={{
               borderRight: "none", // Remove Menu's own border right
             }}
@@ -130,14 +132,50 @@ export default function DashboardLayout({
               //   label: <Link href="/dashboard/usage">Usage</Link>,
               // },
               {
-                key: "/dashboard/webhooks",
-                icon: <CloudOutlined />,
-                label: <Link href="/dashboard/webhooks">Webhooks</Link>,
-              },
-              {
-                key: "/dashboard/docs",
-                icon: <FileTextOutlined />,
-                label: <Link href="/dashboard/docs">API Docs</Link>,
+                key: "products",
+                icon: <AppstoreOutlined />,
+                label: "Products",
+                children: [
+                  {
+                    key: "bin-lookup",
+                    label: "Bin Lookup",
+                    children: [
+                      {
+                        key: "/dashboard/products/bin-lookup/docs",
+                        icon: <FileTextOutlined />,
+                        label: (
+                          <Link href="/dashboard/products/bin-lookup/docs">
+                            API Docs
+                          </Link>
+                        ),
+                      },
+                    ],
+                  },
+                  {
+                    key: "mock-psp",
+                    label: "Mock PSP",
+                    children: [
+                      {
+                        key: "/dashboard/products/mock-psp/webhooks",
+                        icon: <CloudOutlined />,
+                        label: (
+                          <Link href="/dashboard/products/mock-psp/webhooks">
+                            Webhooks
+                          </Link>
+                        ),
+                      },
+                      {
+                        key: "/dashboard/products/mock-psp/docs",
+                        icon: <FileTextOutlined />,
+                        label: (
+                          <Link href="/dashboard/products/mock-psp/docs">
+                            API Docs
+                          </Link>
+                        ),
+                      },
+                    ],
+                  },
+                ],
               },
             ]}
           />

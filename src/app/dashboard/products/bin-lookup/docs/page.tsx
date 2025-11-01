@@ -13,7 +13,7 @@ export default function ApiDocsPage() {
       if (window.SwaggerUIBundle) {
         // @ts-expect-error -- Swagger UI adds itself to the window object
         window.SwaggerUIBundle({
-          url: "/swagger.json",
+          url: "/binlookup-swagger.json",
           dom_id: "#swagger-ui",
         });
       }

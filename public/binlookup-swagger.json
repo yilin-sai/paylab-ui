@@ -1,0 +1,130 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "An API for BIN (Bank Identification Number) lookup that allows you to retrieve detailed information about a specific BIN, such as card brand, type, category, issuer, and country.",
+    "version": "0.1.0",
+    "title": "PayLab Bin Lookup API",
+    "contact": {
+      "email": "yilin.sai.sydney@gmail.com"
+    }
+  },
+  "servers": [{ "url": "https://paylab-production.up.railway.app/" }],
+  "tags": [
+    {
+      "name": "Bin Lookup",
+      "description": "Retrieve information about a specific BIN (Bank Identification Number)."
+    }
+  ],
+  "paths": {
+    "/bin-lookup/{bin}": {
+      "get": {
+        "tags": ["Bin Lookup"],
+        "summary": "Retrieve BIN Information",
+        "description": "Retrieves information about a specific BIN.",
+        "operationId": "getBinLookup",
+        "parameters": [
+          {
+            "name": "bin",
+            "in": "path",
+            "description": "The BIN to retrieve information for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A BIN Lookup Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinLookupResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BIN not valid"
+          },
+          "404": {
+            "description": "BIN not found"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "BinLookupResult": {
+        "type": "object",
+        "properties": {
+          "bin": {
+            "type": "string",
+            "description": "The BIN (Bank Identification Number)"
+          },
+          "brand": {
+            "type": "string",
+            "description": "The card brand (e.g., Visa, MasterCard)"
+          },
+          "type": {
+            "type": "string",
+            "description": "The card type (e.g., credit, debit)"
+          },
+          "category": {
+            "type": "string",
+            "description": "The card category (e.g., consumer, business)"
+          },
+          "issuer": {
+            "type": "string",
+            "description": "The card issuer name"
+          },
+          "issuerPhone": {
+            "type": "string",
+            "description": "The card issuer phone number"
+          },
+          "issuerUrl": {
+            "type": "string",
+            "description": "The card issuer website URL"
+          },
+          "isoCode2": {
+            "type": "string",
+            "description": "The ISO 3166-1 alpha-2 country code"
+          },
+          "isoCode3": {
+            "type": "string",
+            "description": "The ISO 3166-1 alpha-3 country code"
+          },
+          "countryName": {
+            "type": "string",
+            "description": "The country name"
+          }
+        },
+        "example": {
+          "bin": "104473",
+          "brand": "PRIVATE LABEL",
+          "type": "DEBIT",
+          "category": "",
+          "issuer": "LUXURY JEWELLERY CLASS (LJC) - TDFS",
+          "issuerPhone": "",
+          "issuerUrl": "",
+          "isoCode2": "CA",
+          "isoCode3": "CAN",
+          "countryName": "CANADA"
+        }
+      }
+    }
+  }
+}

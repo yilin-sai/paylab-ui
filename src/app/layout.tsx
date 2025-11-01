@@ -44,6 +44,8 @@ export default function RootLayout({
                 },
                 Menu: {
                   colorBgContainer: "#f2f2f2", // Menu container background
+                  subMenuItemBg: "#f2f2f2",
+                  itemBg: "#f2f2f2",
                 },
               },
             }}

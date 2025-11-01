@@ -12,7 +12,7 @@ import {
   Space,
   App,
 } from "antd";
-import { CONTENT_MARGIN, SIDER_WIDTH } from "../layout";
+import { CONTENT_MARGIN, SIDER_WIDTH } from "../../../layout";
 import {
   createWebhook,
   getPsps,
