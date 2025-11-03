@@ -3,12 +3,12 @@
   "info": {
     "description": "An API for BIN (Bank Identification Number) lookup that allows you to retrieve detailed information about a specific BIN, such as card brand, type, category, issuer, and country.",
     "version": "0.1.0",
-    "title": "PayLab Bin Lookup API",
+    "title": "PayLab BIN Lookup API",
     "contact": {
       "email": "yilin.sai.sydney@gmail.com"
     }
   },
-  "servers": [{ "url": "https://paylab-production.up.railway.app/" }],
+  "servers": [{ "url": "https://api.paylabo.dev/" }],
   "tags": [
     {
       "name": "Bin Lookup",

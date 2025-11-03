@@ -111,7 +111,12 @@ export default function DashboardLayout({
           <Menu
             mode="inline"
             selectedKeys={[pathname]}
-            defaultOpenKeys={["products", "mock-psp", "bin-lookup"]}
+            defaultOpenKeys={[
+              "products",
+              "mock-psp",
+              "bin-lookup",
+              "bsb-lookup",
+            ]}
             style={{
               borderRight: "none", // Remove Menu's own border right
             }}
@@ -138,13 +143,28 @@ export default function DashboardLayout({
                 children: [
                   {
                     key: "bin-lookup",
-                    label: "Bin Lookup",
+                    label: "BIN Lookup",
                     children: [
                       {
                         key: "/dashboard/products/bin-lookup/docs",
                         icon: <FileTextOutlined />,
                         label: (
                           <Link href="/dashboard/products/bin-lookup/docs">
+                            API Docs
+                          </Link>
+                        ),
+                      },
+                    ],
+                  },
+                  {
+                    key: "bsb-lookup",
+                    label: "BSB Lookup",
+                    children: [
+                      {
+                        key: "/dashboard/products/bsb-lookup/docs",
+                        icon: <FileTextOutlined />,
+                        label: (
+                          <Link href="/dashboard/products/bsb-lookup/docs">
                             API Docs
                           </Link>
                         ),

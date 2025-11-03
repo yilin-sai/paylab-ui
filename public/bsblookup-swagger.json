@@ -1,0 +1,120 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "An API for BSB (Bank State Branch) lookup that allows you to retrieve detailed information about a specific BSB, such as bank name, branch address, and contact details.",
+    "version": "0.1.0",
+    "title": "PayLab BSB Lookup API",
+    "contact": {
+      "email": "yilin.sai.sydney@gmail.com"
+    }
+  },
+  "servers": [{ "url": "https://api.paylabo.dev/" }],
+  "tags": [
+    {
+      "name": "BSB Lookup",
+      "description": "Retrieve information about a specific BSB (Bank State Branch)."
+    }
+  ],
+  "paths": {
+    "/bsb-lookup/{bsb}": {
+      "get": {
+        "tags": ["BSB Lookup"],
+        "summary": "Retrieve BSB Information",
+        "description": "Retrieves information about a specific BSB.",
+        "operationId": "getBsbLookup",
+        "parameters": [
+          {
+            "name": "bsb",
+            "in": "path",
+            "description": "The BSB to retrieve information for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A BSB Lookup Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BsbLookupResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BSB not valid"
+          },
+          "404": {
+            "description": "BSB not found"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "BsbLookupResult": {
+        "type": "object",
+        "properties": {
+          "bsbCode": {
+            "type": "string",
+            "description": "The BSB (Bank State Branch) code"
+          },
+          "financialInstitutionMnemonic": {
+            "type": "string",
+            "description": "The financial institution mnemonic (e.g., ANZ, NAB)"
+          },
+          "bsbName": {
+            "type": "string",
+            "description": "The BSB name"
+          },
+          "address": {
+            "type": "string",
+            "description": "The BSB address"
+          },
+          "suburb": {
+            "type": "string",
+            "description": "The suburb name"
+          },
+          "state": {
+            "type": "string",
+            "description": "The state name"
+          },
+          "postcode": {
+            "type": "string",
+            "description": "The postcode"
+          },
+          "streamCode": {
+            "type": "string",
+            "description": "The payment streams supported by this BSB:\nP: Paper (cheques)\nE: Electronic (direct entry)\nH: High Value\nCombinations (e.g., PE, PH, EH, PEH) indicate support for multiple payment types."
+          }
+        },
+        "example": {
+          "bsbCode": "012-002",
+          "financialInstitutionMnemonic": "ANZ",
+          "bsbName": "ANZ Smart Choice",
+          "address": "115 Pitt Street",
+          "suburb": "Sydney",
+          "state": "NSW",
+          "postcode": "2000",
+          "streamCode": "PEH"
+        }
+      }
+    }
+  }
+}

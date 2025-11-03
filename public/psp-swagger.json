@@ -8,7 +8,7 @@
       "email": "yilin.sai.sydney@gmail.com"
     }
   },
-  "servers": [{ "url": "https://paylab-production.up.railway.app/" }],
+  "servers": [{ "url": "https://api.paylabo.dev/" }],
   "tags": [
     {
       "name": "Payment Intent",
