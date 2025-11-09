@@ -41,17 +41,17 @@ export default function Dashboard() {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="📡 BIN Lookup" variant="borderless">
-            <Paragraph>Learn how to use the BIN lookup API.</Paragraph>
-            <Link href="/dashboard/products/bin-lookup/docs">
+          <Card title="📘 Mock PSP API" variant="borderless">
+            <Paragraph>Learn how to use the Mock PSP API.</Paragraph>
+            <Link href="/dashboard/products/mock-psp/docs/canonical">
               <Button type="primary">Try it out</Button>
             </Link>
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="📘 Mock PSP API" variant="borderless">
-            <Paragraph>Learn how to use the Mock PSP API.</Paragraph>
-            <Link href="/dashboard/products/mock-psp/docs">
+          <Card title="📡 BIN Lookup" variant="borderless">
+            <Paragraph>Learn how to use the BIN lookup API.</Paragraph>
+            <Link href="/dashboard/products/bin-lookup/docs">
               <Button type="primary">Try it out</Button>
             </Link>
           </Card>

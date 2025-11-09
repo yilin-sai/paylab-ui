@@ -3,7 +3,7 @@
   "info": {
     "description": "An API for a mock Payment Service Provider (PSP) that allows you to create and manage payment intents and payments. Webhooks can be configured to receive real-time updates about payment status changes.",
     "version": "0.1.0",
-    "title": "PayLab PSP API",
+    "title": "Canonical PSP API",
     "contact": {
       "email": "yilin.sai.sydney@gmail.com"
     }

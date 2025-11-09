@@ -1,0 +1,275 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "This is a mock API that simulates Stripe's Payment Intent endpoints. It provides endpoints to create and manage Payment Intents, enabling seamless integration with Stripe's payment processing system for testing purposes. This mock API supports operations such as creating Payment Intents, confirming payments, and retrieving real-time updates via webhooks. Refer to Stripe's official documentation for detailed request and response schemas.",
+    "version": "0.1.0",
+    "title": "Mock Stripe Payment Intent API",
+    "contact": {
+      "email": "yilin.sai.sydney@gmail.com"
+    }
+  },
+  "servers": [{ "url": "https://api.paylabo.dev/" }],
+  "tags": [
+    {
+      "name": "Payment Intent",
+      "description": "Payment Intent represents your intention to collect a payment from a customer."
+    }
+  ],
+  "paths": {
+    "/psp/stripe/2025-10-29-clover/v1/payment_intents/": {
+      "post": {
+        "tags": ["Payment Intent"],
+        "summary": "Create a Payment Intent",
+        "description": "Creates a Payment Intent object.",
+        "operationId": "createPaymentIntent",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "description": "A unique key to identify the request and ensure idempotency",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Refer to Stripe's official documentation for the Payment Intent request body schema.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "amount": 5000,
+                "currency": "USD"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Refer to Stripe's official documentation for the Payment Intent response body schema.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "c425a98f-2962-407c-8c60-470c285315e0",
+                  "object": "payment_intent",
+                  "amount": 5000,
+                  "amount_capturable": 0,
+                  "amount_details": null,
+                  "amount_received": 0,
+                  "application": null,
+                  "application_fee_amount": null,
+                  "automatic_payment_methods": null,
+                  "canceled_at": null,
+                  "cancellation_reason": null,
+                  "capture_method": "automatic",
+                  "client_secret": "c425a98f-2962-407c-8c60-470c285315e0_secret_mockedvalue",
+                  "confirmation_method": "manual",
+                  "created": 1762560039030,
+                  "currency": "USD",
+                  "customer": null,
+                  "description": null,
+                  "last_payment_error": null,
+                  "latest_charge": null,
+                  "livemode": false,
+                  "metadata": {},
+                  "next_action": null,
+                  "on_behalf_of": null,
+                  "payment_method": null,
+                  "payment_method_options": null,
+                  "payment_method_types": ["card"],
+                  "processing": null,
+                  "receipt_email": null,
+                  "review": null,
+                  "setup_future_usage": null,
+                  "shipping": null,
+                  "statement_descriptor": null,
+                  "statement_descriptor_suffix": null,
+                  "status": "requires_payment_method",
+                  "transfer_data": null,
+                  "transfer_group": null
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/psp/stripe/2025-10-29-clover/v1/payment_intents/{id}": {
+      "get": {
+        "tags": ["Payment Intent"],
+        "summary": "Retrieve a Payment Intent",
+        "description": "Retrieves the details of a Payment Intent that has previously been created.",
+        "operationId": "retrievePaymentIntent",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Payment Intent to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Refer to Stripe's official documentation for the Payment Intent response body schema.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "6a07ae82-984a-4ed6-b05c-f7d09fa68455",
+                  "object": "payment_intent",
+                  "amount": 5000,
+                  "amount_capturable": 0,
+                  "amount_details": null,
+                  "amount_received": 0,
+                  "application": null,
+                  "application_fee_amount": null,
+                  "automatic_payment_methods": null,
+                  "canceled_at": null,
+                  "cancellation_reason": null,
+                  "capture_method": "automatic",
+                  "client_secret": "6a07ae82-984a-4ed6-b05c-f7d09fa68455_secret_mockedvalue",
+                  "confirmation_method": "manual",
+                  "created": 1762586535646,
+                  "currency": "USD",
+                  "customer": null,
+                  "description": null,
+                  "last_payment_error": null,
+                  "livemode": false,
+                  "metadata": {},
+                  "next_action": null,
+                  "on_behalf_of": null,
+                  "payment_method": null,
+                  "payment_method_options": null,
+                  "payment_method_types": ["card"],
+                  "processing": null,
+                  "receipt_email": null,
+                  "review": null,
+                  "setup_future_usage": null,
+                  "shipping": null,
+                  "statement_descriptor": null,
+                  "statement_descriptor_suffix": null,
+                  "status": "requires_payment_method",
+                  "transfer_data": null,
+                  "transfer_group": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/psp/stripe/2025-10-29-clover/v1/payment_intents/{id}/confirm": {
+      "post": {
+        "tags": ["Payment Intent"],
+        "summary": "Create a Payment",
+        "description": "Confirm that your customer intends to pay with current or provided payment method. Upon confirmation, the PaymentIntent will attempt to initiate a payment.",
+        "operationId": "createPayment",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "description": "A unique key to identify the request and ensure idempotency",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Payment Intent to associate the Payment with",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Refer to Stripe's official documentation for the Payment Intent request body schema.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "payment_method": "pm_card_visa",
+                "return_url": "https://example.com",
+                "simulate": {
+                  "transactionResult": "authorised"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Refer to Stripe's official documentation for the Payment Intent response body schema.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "c425a98f-2962-407c-8c60-470c285315e0",
+                  "object": "payment_intent",
+                  "amount": 5000,
+                  "amount_capturable": 0,
+                  "amount_details": null,
+                  "amount_received": 0,
+                  "application": null,
+                  "application_fee_amount": null,
+                  "automatic_payment_methods": null,
+                  "canceled_at": null,
+                  "cancellation_reason": null,
+                  "capture_method": "automatic",
+                  "client_secret": "c425a98f-2962-407c-8c60-470c285315e0_secret_mockedvalue",
+                  "confirmation_method": "manual",
+                  "created": 1762560039030,
+                  "currency": "USD",
+                  "customer": null,
+                  "description": null,
+                  "last_payment_error": null,
+                  "latest_charge": "99beab7a-a975-481c-ab08-dfd1a05e1462",
+                  "livemode": false,
+                  "metadata": {},
+                  "next_action": null,
+                  "on_behalf_of": null,
+                  "payment_method": "pm_card_visa",
+                  "payment_method_options": null,
+                  "payment_method_types": ["card"],
+                  "processing": null,
+                  "receipt_email": null,
+                  "review": null,
+                  "setup_future_usage": null,
+                  "shipping": null,
+                  "statement_descriptor": null,
+                  "statement_descriptor_suffix": null,
+                  "status": "processing",
+                  "transfer_data": null,
+                  "transfer_group": null
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  }
+}

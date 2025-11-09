@@ -20,7 +20,7 @@ import {
 
 const { Header, Sider, Content } = Layout;
 
-export const SIDER_WIDTH = 200;
+export const SIDER_WIDTH = 240;
 export const HEADER_HEIGHT = 64;
 export const CONTENT_MARGIN = 16;
 
@@ -53,26 +53,51 @@ export default function DashboardLayout({
           padding: "0 32px",
         }}
       >
-        PayLab Developer Console
-        {/* add github badge */}
+        <span style={{ marginRight: "auto" }}>PayLab Developer Console</span>
+        <a
+          href="https://paylab-docs.vercel.app/docs/overview"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            margin: "0px 8px",
+            color: "#6c757d",
+            textDecoration: "none",
+            fontSize: "16px",
+            fontWeight: 400,
+            cursor: "pointer",
+          }}
+        >
+          Documentation
+        </a>
+        <a
+          href="https://paylab-docs.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            margin: "0px 8px",
+            color: "#6c757d",
+            textDecoration: "none",
+            fontSize: "16px",
+            fontWeight: 400,
+            cursor: "pointer",
+          }}
+        >
+          Homepage
+        </a>
         <a
           href="https://github.com/yilin-sai/paylab-ui"
           target="_blank"
           rel="noopener noreferrer"
           style={{
-            marginLeft: 8,
-            marginRight: "auto",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
+            margin: "0px 8px",
+            color: "#6c757d",
+            textDecoration: "none",
+            fontSize: "16px",
+            fontWeight: 400,
+            cursor: "pointer",
           }}
         >
-          {/* Repo name badge */}
-          <img
-            src="https://img.shields.io/badge/GitHub/paylabui-blue?logo=github"
-            alt="GitHub Repo"
-            style={{ height: 24 }} // Increase badge height
-          />
+          GitHub
         </a>
         <SignedOut>
           <SignInButton>
@@ -112,10 +137,9 @@ export default function DashboardLayout({
             mode="inline"
             selectedKeys={[pathname]}
             defaultOpenKeys={[
-              "products",
               "mock-psp",
-              "bin-lookup",
-              "bsb-lookup",
+              "/dashboard/products/mock-psp/docs",
+              "products",
             ]}
             style={{
               borderRight: "none", // Remove Menu's own border right
@@ -131,6 +155,45 @@ export default function DashboardLayout({
                 icon: <ApiOutlined />,
                 label: <Link href="/dashboard/apikeys">API Keys</Link>,
               },
+              {
+                key: "mock-psp",
+                label: "Mock PSP",
+                children: [
+                  {
+                    key: "/dashboard/products/mock-psp/webhooks",
+                    icon: <CloudOutlined />,
+                    label: (
+                      <Link href="/dashboard/products/mock-psp/webhooks">
+                        Webhooks
+                      </Link>
+                    ),
+                  },
+                  {
+                    key: "/dashboard/products/mock-psp/docs",
+                    label: "API Docs",
+                    children: [
+                      {
+                        key: "/dashboard/products/mock-psp/docs/canonical",
+                        icon: <FileTextOutlined />,
+                        label: (
+                          <Link href="/dashboard/products/mock-psp/docs/canonical">
+                            Canonical PSP
+                          </Link>
+                        ),
+                      },
+                      {
+                        key: "/dashboard/products/mock-psp/docs/stripe",
+                        icon: <FileTextOutlined />,
+                        label: (
+                          <Link href="/dashboard/products/mock-psp/docs/stripe">
+                            Stripe
+                          </Link>
+                        ),
+                      },
+                    ],
+                  },
+                ],
+              },
               // {
               //   key: "/dashboard/usage",
               //   icon: <BarChartOutlined />,
@@ -139,7 +202,7 @@ export default function DashboardLayout({
               {
                 key: "products",
                 icon: <AppstoreOutlined />,
-                label: "Products",
+                label: "Utilities",
                 children: [
                   {
                     key: "bin-lookup",
@@ -165,30 +228,6 @@ export default function DashboardLayout({
                         icon: <FileTextOutlined />,
                         label: (
                           <Link href="/dashboard/products/bsb-lookup/docs">
-                            API Docs
-                          </Link>
-                        ),
-                      },
-                    ],
-                  },
-                  {
-                    key: "mock-psp",
-                    label: "Mock PSP",
-                    children: [
-                      {
-                        key: "/dashboard/products/mock-psp/webhooks",
-                        icon: <CloudOutlined />,
-                        label: (
-                          <Link href="/dashboard/products/mock-psp/webhooks">
-                            Webhooks
-                          </Link>
-                        ),
-                      },
-                      {
-                        key: "/dashboard/products/mock-psp/docs",
-                        icon: <FileTextOutlined />,
-                        label: (
-                          <Link href="/dashboard/products/mock-psp/docs">
                             API Docs
                           </Link>
                         ),
