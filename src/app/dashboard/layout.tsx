@@ -55,7 +55,7 @@ export default function DashboardLayout({
       >
         <span style={{ marginRight: "auto" }}>PayLab Developer Console</span>
         <a
-          href="https://paylab-docs.vercel.app/docs/overview"
+          href="https://docs.paylabo.dev"
           target="_blank"
           rel="noopener noreferrer"
           style={{
@@ -70,7 +70,7 @@ export default function DashboardLayout({
           Documentation
         </a>
         <a
-          href="https://paylab-docs.vercel.app/"
+          href="https://www.paylabo.dev"
           target="_blank"
           rel="noopener noreferrer"
           style={{
