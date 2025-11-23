@@ -198,7 +198,7 @@ export default function WebhooksPage() {
                 <Button
                   onClick={() =>
                     router.push(
-                      `/dashboard/webhooks/${record.webhookSubscriptionId}/history`
+                      `/dashboard/products/mock-psp/webhooks/${record.webhookSubscriptionId}/history`
                     )
                   }
                 >
